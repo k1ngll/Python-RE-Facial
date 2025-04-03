@@ -1,6 +1,6 @@
 # **Reconhecimento Facial para Catraca Universitária** 🎓🚀  
 
-Este projeto permite o cadastro e autenticação de alunos via reconhecimento facial, integrado a uma catraca.
+Este projeto permite o cadastro e autenticação de alunos via reconhecimento facial, e monstrando suas disponiveis do dia se houver.
 
 ---
 
