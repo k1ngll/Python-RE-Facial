@@ -5,7 +5,7 @@ Este projeto permite o cadastro e autenticação de alunos via reconhecimento fa
 ---
 
 ## **1. Tecnologias Utilizadas**  
-✅ Python 3.x  
+✅ Python 3.12 
 ✅ Django + Django REST Framework  
 ✅ OpenCV + dlib + face_recognition  
 ✅ PostgreSQL (ou outro banco de dados)  
