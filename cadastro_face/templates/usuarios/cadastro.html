@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Metadados essenciais -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Importa o Bootstrap 5 para estilização -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <title>Cadastro de Biometria Facial</title>
+</head>
+
+<body style="background-color: #dcdcdc; display: flex; justify-content: center;">
+    <div class="container mt-4">
+
+        <!-- Alerta de sucesso da captura da foto (oculto por padrão) -->
+        <div id="fotoStatus" class="alert alert-success text-center" style="display: none;">
+            Foto capturada com sucesso!
+        </div>
+
+        <!-- Exibe mensagens Django -->
+        <ul class="messages list-unstyled">
+            {% for m in messages %}
+                {% if m.tags == "error" %}
+                    <li class="alert alert-danger fade show" role="alert">
+                        {{ m }}
+                    </li>
+                {% else %}
+                    <li class="alert alert-{{ m.tags }} fade show" role="alert">
+                        {{ m }}
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+
+        <!-- Formulário de cadastro -->
+        <form method="POST" enctype="multipart/form-data" class="p-4 shadow-lg rounded bg-light">
+            {% csrf_token %}
+
+            <h3 class="text-center mb-4">Cadastro de Biometria Facial</h3>
+
+            <div class="mb-3">
+                <label class="form-label">Nome</label>
+                {{ form.nome }}
+                {% if form.nome.errors %}
+                    <div class="text-danger small">
+                        {% for error in form.nome.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <div class="text-danger small">
+                        {% for error in form.email.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Tipo de Usuário</label>
+                {{ form.tipo }}
+                {% if form.tipo.errors %}
+                    <div class="text-danger small">
+                        {% for error in form.tipo.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Matrícula</label>
+                {{ form.matricula }}
+                {% if form.matricula.errors %}
+                    <div class="text-danger small">
+                        {% for error in form.matricula.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Curso</label>
+                {{ form.curso }}
+                {% if form.curso.errors %}
+                    <div class="text-danger small">
+                        {% for error in form.curso.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Botão para abrir a webcam -->
+            <div class="mb-3 text-center">
+                <button type="button" class="btn btn-primary" onclick="abrirWebcam()">Abrir Webcam</button>
+            </div>
+
+            <!-- Área de exibição do vídeo da webcam -->
+            <div class="text-center">
+                <video id="video" width="300" height="200" class="border rounded shadow-sm mb-2 d-block mx-auto" autoplay></video>
+            </div>
+
+            <!-- Botão para capturar a foto da webcam -->
+            <div class="mb-3 text-center">
+                <button type="button" id="capturar_Foto" class="btn btn-warning" onclick="capturarFoto()">📸 Capturar Foto</button>
+            </div>
+
+            <!-- Canvas invisível -->
+            <canvas id="canvas" width="300" height="200" style="display:none;"></canvas>
+
+            <!-- Campo oculto da imagem -->
+            <input type="hidden" id="foto" name="foto"> 
+
+            <!-- Botão de envio -->
+            <div class="text-center mb-2">
+                <button type="submit" class="btn btn-success w-25">Cadastrar</button>
+            </div>
+        </form>
+    </div>
+
+    {% load static %}
+    <script src="{% static 'js/script.js' %}"></script>
+
+    <!-- Script para desabilitar o campo curso se tipo for funcionário -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const tipoInput = document.getElementById('id_tipo');
+            const cursoInput = document.getElementById('id_curso');
+
+            function atualizarCampoCurso() {
+                const tipoSelecionado = tipoInput.value.toLowerCase();
+                if (tipoSelecionado === 'funcionario') {
+                    cursoInput.disabled = true;
+                    cursoInput.value = '';
+                } else {
+                    cursoInput.disabled = false;
+                }
+            }
+
+            tipoInput.addEventListener('change', atualizarCampoCurso);
+
+            // Executa ao carregar a página (ex: edição de cadastro)
+            atualizarCampoCurso();
+        });
+    </script>
+</body>
+</html>

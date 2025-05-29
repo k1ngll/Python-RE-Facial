@@ -1,0 +1,175 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Painel do Gestor - SchoolPass</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            padding-top: 70px; /* Para navbar fixed-top. Ajuste conforme altura da navbar. */
+            background-color: #f8f9fa; /* Bootstrap bg-light */
+        }
+
+        /* Estilização para campos de formulário renderizados com {{ form.as_p }} */
+        .form-card .card-body form p {
+            margin-bottom: 1rem;
+        }
+        .form-card .card-body form label {
+            display: block;
+            margin-bottom: .5rem;
+            font-weight: 500;
+        }
+        /* Aplicar a classe form-control diretamente nos widgets do Django Form é o ideal. */
+        /* Este CSS é um paliativo se os campos não tiverem a classe form-control. */
+        .form-card .card-body form input:not([type='checkbox']):not([type='radio']):not([type='file']),
+        .form-card .card-body form select,
+        .form-card .card-body form textarea {
+            display: block;
+            width: 100%;
+            padding: .375rem .75rem;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1.5;
+            color: var(--bs-body-color);
+            background-color: var(--bs-form-control-bg);
+            background-clip: padding-box;
+            border: var(--bs-border-width) solid var(--bs-border-color);
+            appearance: none;
+            border-radius: var(--bs-border-radius);
+            transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+        }
+        .form-card .card-body form input:not([type='checkbox']):not([type='radio']):not([type='file']):focus,
+        .form-card .card-body form select:focus,
+        .form-card .card-body form textarea:focus {
+            border-color: #86b7fe;
+            outline: 0;
+            box-shadow: 0 0 0 .25rem rgba(13, 110, 253, .25);
+        }
+         .form-card .card-body form button[type="submit"] {
+            min-width: 120px; 
+        }
+
+        .card-table .card-body {
+            padding: 0; /* Remove padding do card-body para a tabela ocupar todo o espaço */
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'gestor:tela_gestor' %}">
+                <i class="bi bi-shield-lock-fill me-2"></i>SchoolPass Gestor
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavGestor"
+                    aria-controls="navbarNavGestor" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNavGestor">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'tela_gestor' %}active{% endif %}" href="{% url 'gestor:tela_gestor' %}">
+                            <i class="bi bi-columns-gap me-1"></i>Painel Administrativo
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.resolver_match.url_name == 'editar_grade' %}active{% endif %}" href="{% url 'gestor:editar_grade' %}">
+                            <i class="bi bi-calendar-week me-1"></i>Editar Grade de Horários
+                        </a>
+                    </li>
+                </ul>
+                <a href="{% url 'gestor:home' %}" class="btn btn-outline-light">
+                    <i class="bi bi-arrow-left-circle me-2"></i>Voltar para Home
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4 mb-5"> 
+        <h1 class="mb-4 display-5"><i class="bi bi-person-video3 me-2"></i>Painel do Gestor</h1>
+
+        {% if messages %}
+        <div class="mb-4">
+            {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        </div>
+            <script>
+                // Espera 5 segundos e depois esconde as mensagens
+                setTimeout(function() {
+                const alerts = document.querySelectorAll('.alert');
+                alerts.forEach(function(alert) {
+                alert.style.transition = "opacity 0.5s ease-out";
+                alert.style.opacity = "0";
+                setTimeout(() => alert.remove(), 500); // Remove do DOM após o fade
+                 });
+                }, 5000); // tempo em milissegundos (5000ms = 5s)
+            </script>
+        {% endif %}
+
+        <div class="card mb-4 shadow-sm form-card">
+            <div class="card-header bg-primary text-white d-flex align-items-center">
+                <i class="bi bi-upload me-2"></i>Importar Grade Horária
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-success mt-3">
+                        <i class="bi bi-check-circle me-2"></i>Importar
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card shadow-sm card-table">
+            <div class="card-header bg-primary text-white d-flex align-items-center">
+                <i class="bi bi-clipboard-data me-2"></i>Log de Acessos
+            </div>
+            <div class="card-body"> 
+                <div class="table-responsive"> 
+                    <table class="table table-striped table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Nome</th>
+                                <th>Sala</th>
+                                <th>Status</th>
+                                <th>Horário Entrada</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in logs %}
+                            <tr>
+                                <td>{{ log.usuario.nome }}</td>
+                                <td>{{ log.sala }}</td>
+                                <td>
+                                    {% if log.status %}
+                                        <span class="badge bg-success">Entrou</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">Não entrou</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ log.horario_entrada|date:"d/m/Y H:i:s" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center p-4">Nenhum acesso registrado.</td> {# Colspan ajustado para 5 colunas #}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

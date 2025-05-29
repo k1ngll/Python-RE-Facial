@@ -1,0 +1,198 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SchoolPass</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+        /* Reset básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%; /* Importante para o min-height do content-area funcionar bem */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa; /* Mantido do seu original */
+            color: #333;
+            line-height: 1.6; /* Adicionado para consistência com outras páginas */
+            /* Adiciona padding-top para compensar a navbar fixa */
+            padding-top: 70px; /* Ajuste este valor se a altura da navbar Bootstrap mudar (geralmente ~56px) */
+        }
+
+        /* Área de Conteúdo Principal - agora centraliza os cards abaixo da navbar */
+        .content-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            /* Ajusta min-height para ocupar o restante da viewport abaixo da navbar */
+            min-height: calc(100vh - 70px); 
+            padding-left: 15px; /* Pequeno padding lateral */
+            padding-right: 15px;
+            padding-bottom: 30px; /* Um respiro na parte inferior */
+        }
+
+        /* Estilos dos Cards e Container (mantidos do seu CSS original) */
+        .container-cards { /* Renomeado de .container para evitar conflito com Bootstrap e para clareza */
+            width: 360px;
+            background: white;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            overflow: hidden;
+        }
+        .card { /* Mantidos os estilos do seu .card */
+            flex: 1;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.3s ease, color 0.3s ease;
+            user-select: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center; /* Adicionado para garantir alinhamento central dos itens do card */
+            gap: 10px;
+        }
+        .card:not(:last-child) {
+            border-right: 1px solid #eee;
+        }
+        .card:hover {
+            background: #4a90e2;
+            color: white;
+        }
+        .card h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            /* A cor será herdada ou definida pelo :hover */
+        }
+        .card p {
+            font-size: 1rem;
+            opacity: 0.7;
+            /* A cor será herdada ou definida pelo :hover */
+        }
+        .icon { /* Mantidos os estilos do seu .icon */
+            font-size: 48px;
+            margin-bottom: 15px;
+            transition: transform 0.3s ease;
+        }
+        .card:hover .icon {
+            transform: scale(1.2);
+        }
+
+        /* Responsividade (mantida do seu original, ajustando o seletor do container dos cards) */
+        @media (max-width: 600px) { /* Ajustei o breakpoint para 600px para corresponder melhor ao seu CSS original da home */
+            body {
+                padding-top: 60px; /* Navbar pode ser um pouco menor no mobile */
+            }
+            .content-area {
+                 min-height: calc(100vh - 60px);
+            }
+            .container-cards { /* Seletor ajustado */
+                width: 90vw;
+                flex-direction: column;
+            }
+            .card:not(:last-child) {
+                border-right: none;
+                border-bottom: 1px solid #eee;
+            }
+            /* Outros estilos responsivos dos cards já estavam no seu CSS */
+        }
+    </style>
+</head>
+<body>
+
+
+
+
+
+    {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success">{{ message }}</div>
+            {% endfor %}
+
+
+            <script>
+                // Espera 5 segundos e depois esconde as mensagens
+                setTimeout(function() {
+                const alerts = document.querySelectorAll('.alert');
+                alerts.forEach(function(alert) {
+                alert.style.transition = "opacity 0.5s ease-out";
+                alert.style.opacity = "0";
+                setTimeout(() => alert.remove(), 500); // Remove do DOM após o fade
+                 });
+                }, 5000); // tempo em milissegundos (5000ms = 5s)
+        </script>
+    {% endif %}
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm fixed-top">
+        <div class="container-fluid">
+            {# Assume-se que 'gestor:home' é a URL desta página inicial dos cards #}
+            <a class="navbar-brand" href="{% url 'gestor:home' %}"> 
+                <i class="bi bi-shield-lock-fill me-2"></i>SchoolPass
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavHomepage"
+                    aria-controls="navbarNavHomepage" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNavHomepage">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    </ul>
+                
+                {% if user.is_authenticated %}
+                <form action="{% url 'gestor:logout' %}" method="post" class="d-flex">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-light"> {# Estilo consistente com navbar azul #}
+                        <i class="bi bi-box-arrow-right me-2"></i>Sair
+                    </button>
+                </form>
+                {% else %}
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="content-area">
+        <div class="container-cards"> {# Renomeado de 'container' para 'container-cards' #}
+
+            <div class="card" onclick="location.href='/cadastro'">
+                <div class="icon">👨‍🎓</div>
+                <h2>Aluno</h2>
+                <p>Acesso para cadastrar a biometria do aluno</p>
+            </div>
+
+            {% if user.is_authenticated or not user.is_superuser %}
+            <div class="card" onclick="location.href='/gestor/tela_gestor'">
+                <div class="icon">👔</div>
+                <h2>Gestor</h2>
+                <p>Área do gestor para controle</p>
+            </div>
+            {% endif %}
+
+            {% if user.is_authenticated and user.is_superuser %}
+            <div class="card" onclick="location.href='/gestor/cadastro_gestor/'">
+                <div class="icon">⚙️</div>
+                <h2>Admin</h2>
+                <p>Configurações e administração</p>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
