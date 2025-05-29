@@ -3,15 +3,15 @@
 O SchoolPass é um sistema de catraca inteligente que utiliza reconhecimento facial para controlar o acesso de alunos e funcionários em instituições de ensino. Ele visa otimizar a segurança e a logística, oferecendo um controle de entrada rápido e eficiente, além de um painel para gestão de acessos e grades horárias.
 
 ✨ Funcionalidades Principais
-Reconhecimento Facial: Identifica usuários para liberação de acesso e registra entradas/saídas.
+Reconhecimento Facial: Identifica usuários para liberação de acesso e registra entradas.
 
 Cadastro Simplificado: Permite o registro de alunos e funcionários com foto.
 
 Gestão de Grade Horária: matérias e salas via planilha, facilitando a alocação de espaços.
 
-Painel de Gestão: Oferece uma visão geral dos acessos, incluindo registros de entrada/saída e status (liberado/negado).
+Painel de Gestão: Oferece uma visão geral dos acessos, incluindo registros de entrada.
 
-Interface Intuitiva: Exibe informações claras para o usuário (nome, sala/matéria) e feedback visual.
+Interface Intuitiva: Exibe informações claras para o usuário (nome,sala) e feedback visual.
 
 🛠️ Tecnologias Utilizadas
 Python: Linguagem principal.
