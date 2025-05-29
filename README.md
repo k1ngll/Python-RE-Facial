@@ -7,7 +7,7 @@ Reconhecimento Facial: Identifica usuários para liberação de acesso e registr
 
 Cadastro Simplificado: Permite o registro de alunos e funcionários com foto.
 
-Gestão de Grade Horária: Atualiza automaticamente as matérias e salas via planilha, facilitando a alocação de espaços.
+Gestão de Grade Horária: matérias e salas via planilha, facilitando a alocação de espaços.
 
 Painel de Gestão: Oferece uma visão geral dos acessos, incluindo registros de entrada/saída e status (liberado/negado).
 
